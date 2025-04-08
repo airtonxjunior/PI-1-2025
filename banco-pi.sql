@@ -48,18 +48,6 @@ CREATE TABLE transportes (
     FOREIGN KEY (pessoa_id) REFERENCES pessoas(id)
 );
 
-CREATE TABLE resultados_sustentabilidade (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    pessoa_id INT NOT NULL,
-    data_calculo DATE NOT NULL,
-    pontuacao_agua TINYINT NOT NULL,
-    pontuacao_energia TINYINT NOT NULL COMMENT,
-    pontuacao_residuos TINYINT,
-    pontuacao_transporte TINYINT NOT NULL COMMENT,
-    media_final DECIMAL(3,2) NOT NULL,
-    classificacao_final ENUM('Não Sustentável', 'Mediano', 'Sustentável') NOT NULL,
-    FOREIGN KEY (pessoa_id) REFERENCES pessoas(id)
-);
 
 CREATE TABLE resultados_sustentabilidade (
     id INT AUTO_INCREMENT PRIMARY KEY,
