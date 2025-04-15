@@ -49,6 +49,10 @@ CREATE TABLE resultados_sustentabilidade (
     FOREIGN KEY (monitoramento_id) REFERENCES monitoramento_parametros(id)
 );
 
+
+
+
+
 INSERT INTO pessoas (nome, email, senha) VALUES
 ('Junior', 'junior@email.com', 'senha123'),
 ('Ane', 'ane@email.com', 'senha456');
@@ -135,7 +139,7 @@ WHERE id NOT IN (
     SELECT monitoramento_id FROM resultados_sustentabilidade
 );
 
-
+SELECT * FROM pessoas;
 SELECT * FROM resultados_sustentabilidade;
 
 
