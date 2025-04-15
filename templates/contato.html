@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style-contato.css">
+    <title>Perfil</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar container flex">
+            <h2 class="logo"><a href="#">GreenTech.</a></h2>
+            <ul class="nav-links flex">
+                <li><a href="perfil.html">Voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <section class="contact-section">
+            <h1 class="contact-title">Reporte um Problema</h1>
+            
+            <form id="contactForm">
+                <div class="form-group">
+                    <label for="name">Seu Nome</label>
+                    <input type="text" id="name" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">Seu E-mail</label>
+                    <input type="email" id="email" class="form-control" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Tipo de Problema</label>
+                    <div class="error-types">
+                        <div class="error-option active">Dado Incorreto</div>
+                        <div class="error-option">Erro no Gráfico</div>
+                        <div class="error-option">Problema no Login</div>
+                        <div class="error-option">Outro</div>
+                    </div>
+                    <input type="hidden" id="errorType" value="Dado Incorreto">
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Descreva o Problema</label>
+                    <textarea id="message" class="form-control" required 
+                    placeholder="Ex: Na data XX/XX inseri meu consumo de água como 50m³, mas era 5m³"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="screenshot">Anexar Captura de Tela (Opcional)</label>
+                    <input type="file" id="screenshot" class="form-control" accept="image/*">
+                </div>
+                
+                <button type="submit" class="btn-submit">Enviar Relatório</button>
+            </form>
+        </section>
+    </main>
+
+    <script>
+        // Script para selecionar tipo de erro
+        document.querySelectorAll('.error-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.error-option').forEach(opt => {
+                    opt.classList.remove('active');
+                });
+                this.classList.add('active');
+                document.getElementById('errorType').value = this.textContent;
+            });
+        });
+        
+        // Validação do formulário
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Relatório enviado com sucesso! Agradecemos seu feedback.');
+            this.reset();
+        });
+    </script>
+</body>
+</html>

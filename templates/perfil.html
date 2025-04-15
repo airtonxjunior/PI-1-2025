@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style-perfil.css">
+    <title>Perfil</title>
+</head>
+<body>
+    <div class="global-overlay"></div>
+
+    <header>
+        <nav class="navbar container flex">
+            <h2 class="logo"><a href="#">GreenTech.</a></h2>
+            <ul class="nav-links flex">
+                <li><a href="index.html">Sair</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="perfil" id="perfil">
+        <div class="section-overlay"></div>
+        <div class="container">
+            <div class="section text">
+                <h2 class="username">Olá, @usuário!</h2>
+                <h2>MEU PERFIL</h2>
+                <p>Através dos cards, você pode: registrar seus dados de consumo, verificar seu nível atual de sustentabilidade e acompanhar sua evolução por meio de gráficos detalhados.</p>
+            </div>
+            <ul class="cards flex">
+                <li class="card" onclick="window.location.href='inserir-dados.html'">
+                    <img src="/static/img/dados.jpg" alt="serviceimg"/>
+                    <h3>Inserir Dados</h3>
+                    <p>Insira aqui seus dados de sustentabilidade do dia.</p>
+                </li>
+                <li class="card" onclick="window.location.href='sustentabilidade.html'">
+                    <img src="/static/img/mao.jpg"/>
+                    <h3>Nível de Sustentabilidade</h3>
+                    <p>Consulte aqui seus gráficos de sustentabilidade.</p>
+                </li>
+                <li class="card" onclick="window.location.href='graficos.html'">
+                    <img src="/static/img/graficos.jpg" alt="serviceimg"/>
+                    <h3>Meus Gráficos</h3>
+                    <p>Consulte aqui seus gráficos de sustentabilidade.</p>
+                </li>
+                <li class="card" onclick="window.location.href='editar-dados.html'">
+                    <img src="/static/img/editar dados.jpg" alt="serviceimg"/>
+                    <h3>Editar Dados</h3>
+                    <p>Consulte aqui seus gráficos de sustentabilidade.</p>
+                </li>
+            </ul>    
+        </div>
+
+    </section>
+
+
+    
+</body>
+</html>

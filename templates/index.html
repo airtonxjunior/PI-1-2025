@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="/static/style-home.css">
+
+</head>
+<body>
+
+    <header>
+        <nav class="navbar container flex">
+            <h2 class="logo"><a href="#">GreenTech.</a></h2>
+
+            <ul class="nav-links flex">
+                <li><a href="{{ url_for('user.mostrar_cadastro') }}">Criar Conta</a></li>
+                <li><a href="{{ url_for('user.mostrar_login') }}">Login</a></li>
+                <li><a href="#about">Sobre Nós</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="homepage" id="home">
+        <video class="video" autoplay loop muted src="/static/img/video ‐ Feito com o Clipchamp.mp4" type="video/mp4">
+        </video>
+        <div class="content flex">
+            <div class="text">
+                <h1>GreenTech.</h1>
+                <p>Tecnologia a Serviço do Planeta!</p>
+            </div>
+            <p class="text2">Monitoramos seu impacto ambiental com tecnologia avançada, analisando consumo de água, energia elétrica, geração de resíduos e emissões de transporte. Transformamos dados em insights práticos para você adotar hábitos mais sustentáveis.</p>
+                <a href="#services">Veja como funciona</a>    
+        </div>
+    </section>
+
+    
+    <section class="services" id="services">
+        <div class="container">
+            <div class="section-title">
+                <h2>Métricas de Sustentabilidade</h2>
+                <p>Aqui você encontrará informações sobre os principais dados que analisamos para medir o impacto ambiental, como consumo de água e energia, geração de resíduos e pegada de carbono. Essas métricas ajudam a compreender melhor a relação entre hábitos cotidianos e sustentabilidade.</p>
+            </div>
+
+            <ul class="cards flex">
+                <li class="card">
+                    <img src="/static/img/faucet-3240211_1280.jpg" alt="serviceimg"/>
+                    <h3>Consumo de Água</h3>
+                    <p>A água é um dos recursos mais preciosos do planeta, mas seu uso descontrolado pode levar ao desperdício e à escassez. Para ajudar você a monitorar e reduzir seu consumo, coletamos dados a partir da leitura do relógio de água da sua casa.</p>
+                </li>
+                <li class="card">
+                    <img src="/static/img/light-bulb-4514505_1280.jpg" alt="serviceimg"/>
+                    <h3>Consumo de Energia Elétrica</h3>
+                    <p>A energia elétrica é essencial no nosso dia a dia, mas seu uso excessivo impacta o meio ambiente. Para monitorar seu consumo, coletamos dados a partir da leitura do relógio de energia da sua casa.</p>
+                </li>
+                <li class="card">
+                    <img src="/static/img/istockphoto-1497583487-612x612.jpg" alt="serviceimg"/>
+                    <h3>Geração de Resíduos Não Recicláveis</h3>
+                    <p>Os resíduos que geramos têm impacto no meio ambiente. Coletamos dados a partir da quantidade de resíduos não recicláveis que você descarta. Basta informar o peso aproximado dos resíduos gerados.</p>
+                </li>
+                <li class="card">
+                    <img src="/static/img/car-6810885_1280.jpg" alt="serviceimg"/>
+                    <h3>Uso de Transporte</h3>
+                    <p>O transporte é uma das principais fontes de emissões de carbono. Coletamos dados sobre os tipos de transporte que você utiliza e a distância percorrida. Basta informar quantos quilômetros você percorreu.</p>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="about" id="about">
+        <div class="container">
+             <div class="about-title">
+                <h2>Sobre Nós</h2>
+                <p>Somos uma plataforma comprometida com a construção de um futuro mais sustentável. Acreditamos que pequenas ações diárias podem gerar grandes transformações ambientais.</p>
+            </div>
+            <div class=" row info">
+                <h3>Nossa História</h3>
+                <p>Tudo começou em uma sala de aula da faculdade, onde um grupo de estudantes do curso Engenharia de Software da PUC Campinas se uniu para criar algo que realmente fizesse a diferença. Como parte de um projeto acadêmico, decidimos desenvolver uma ferramenta que ajudasse as pessoas a entender e reduzir seu impacto ambiental no dia a dia.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 GreenTech | Monitoramento Ambiental Inteligente</p>
+<p>PUC Campinas - Engenharia de Software</p>
+        </div>
+    </footer>
+
+
+</body>
+</html>

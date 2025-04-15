@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style-dados.css">
+    <title>Inserir dados</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar container flex">
+            <h2 class="logo"><a href="#">GreenTech.</a></h2>
+
+            <ul class="nav-links flex">
+                <li><a href="perfil.html">Voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="dados" id="dados">
+        <form action="#" method="post">
+            <div class="container">
+                <div class="section-text">
+                    <h2>INSERIR DADOS</h2>
+                <ul class="cards flex">
+                    <li class="card">
+                        <div class="text-card">
+                            <h3>CONSUMO DE ÁGUA</h3>
+                            <p>Informe seu consumo diário total em litros.</p>
+                            </div>
+                        <label for="agua"></label>
+                        <input type="text" id="agua" placeholder="Ex: 150 litros">
+                    </li>
+                    <li class="card">
+                        <div class="text-card">
+                            <h3>CONSUMO DE ENERGIA ELÉTRICA</h3>
+                            <p>Registre seu consumo mensal em kWh.</p>
+                        </div>
+                        <label for="energia"></label>
+                        <input type="text" id="energia" class="input-box" placeholder="Ex: 250 kWh">
+                    </li>
+                    <li class="card">
+                        <div class="text-card">
+                            <h3>GERAÇÃO DE RESÍDUOS NÃO RECICLÁVEIS</h3>
+                            <p>Indique a quantidade diária de resíduos não recicláveis gerados em quilogramas. </p>
+                        </div>
+                        <label for="lixo"></label>
+                        <input type="text" id="lixo" placeholder="Ex: 2.5 kg">
+                    </li>
+                    <li class="card">
+                        <div class="text-card">
+                            <h3>USO DE TRANSPORTE</h3>
+                            <p>Selecione o meio de transporte utilizado e informe a distância percorrida diariamente.</p>
+                        </div>
+                        <div class="transport-container">
+                            <select id="transporte" class="transport-select">
+                                <option value="carro">Carro</option>
+                                <option value="moto">Moto</option>
+                                <option value="onibus">Ônibus</option>
+                                <option value="metro">Metrô/Trem</option>
+                                <option value="bicicleta">Bicicleta</option>
+                                <option value="A-pé">A pé</option>
+                            </select>
+                            <input type="text" id="distancia" placeholder="Distância em km (Ex: 15)">
+                        </div>
+                    </li>
+                </ul>    
+            </div>
+            <button type="submit" class="btn-enviar">Enviar</button>
+        </form>
+    </section>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style-graficos.css">
+    <title>Gráficos</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar container flex">
+            <h2 class="logo"><a href="#">GreenTech.</a></h2>
+            <ul class="nav-links flex">
+                <li><a href="perfil.html">Voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="graficos-container">
+
+        <div class="filtro-graficos">
+            <div class="filtro-wrapper">
+                <span class="filtro-label">Período:</span>
+                <div class="periodo-opcoes">
+                    <button class="periodo-btn active" data-periodo="7">7 dias</button>
+                    <button class="periodo-btn" data-periodo="15">15 dias</button>
+                    <button class="periodo-btn" data-periodo="30">1 mês</button>
+                    <button class="periodo-btn" data-periodo="90">3 meses</button>
+                    <button class="periodo-btn" data-periodo="180">6 meses</button>
+                    <button class="periodo-btn" data-periodo="365">1 ano</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="grafico-principal">
+            <h3 class="grafico-titulo">Seu Desempenho Geral</h3>
+            <div class="img">
+                <img src="/img/GRAFICO PRINC.png" alt="Gráfico principal de sustentabilidade"/>
+            </div>
+        </div>
+        
+
+        <div class="graficos-secundarios">
+            <div class="grafico-card">
+                <h3 class="grafico-titulo">Consumo de Água</h3>
+                <div class="img">
+                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de consumo de água"/>
+                </div>
+            </div>
+            
+            <div class="grafico-card">
+                <h3 class="grafico-titulo">Consumo de Energia</h3>
+                <div class="img">
+                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de consumo de energia"/>
+                </div>
+            </div>
+            
+            <div class="grafico-card">
+                <h3 class="grafico-titulo">Resíduos Reciclados</h3>
+                <div class="img">
+                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de resíduos reciclados"/>
+                </div>
+            </div>
+            
+            <div class="grafico-card">
+                <h3 class="grafico-titulo">Emissão de CO₂</h3>
+                <div class="img">
+                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de emissão de CO₂"/>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const botoes = document.querySelectorAll('.periodo-btn');
+            
+            botoes.forEach(botao => {
+                botao.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    botoes.forEach(btn => {
+                        btn.classList.remove('active');
+                    });
+                    
+                    this.classList.add('active');
+                    
+                });
+            });
+        });
+    </script>
+    
+</body>
+</html>

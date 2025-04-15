@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/static/style-editar.css">
+    <title>Editar Dados</title>
+</head>
+<body>
+    <div class="global-overlay"></div>
+
+    <header>
+        <nav class="navbar container flex">
+            <h2 class="logo"><a href="#">GreenTech.</a></h2>
+            <ul class="nav-links flex">
+                <li><a href="perfil.html">Voltar</a></li>
+            </ul>
+        </nav>
+    </header>
+
+
+    <main class="edit-container">
+        <h1 class="edit-title">Editar Dados</h1>
+        
+        <form class="edit-form">
+            <div class="form-group">
+                <label for="data">Data do Registro</label>
+                <input type="date" id="data" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="tipo">Tipo de Dado</label>
+                <select id="tipo" required onchange="toggleFields(this.value)">
+                    <option value="">Selecione...</option>
+                    <option value="agua">Consumo de Água (m³)</option>
+                    <option value="energia">Consumo de Energia (kWh)</option>
+                    <option value="residuos">Resíduos Produzidos (kg)</option>
+                    <option value="transporte">Emissão por Transporte</option>
+                </select>
+            </div>
+            
+            <div id="transportFields" class="transport-fields">
+                <div class="form-group">
+                    <label>Selecione o tipo de transporte:</label>
+                    <div class="transport-options">
+                        <label class="transport-option">
+                            <input type="radio" name="transporte" value="carro"> Carro
+                        </label>
+                        <label class="transport-option">
+                            <input type="radio" name="transporte" value="carro_eletrico"> A Pé
+                        </label>
+                        <label class="transport-option">
+                            <input type="radio" name="transporte" value="onibus"> Ônibus
+                        </label>
+                        <label class="transport-option">
+                            <input type="radio" name="transporte" value="metro"> Metrô
+                        </label>
+                        <label class="transport-option">
+                            <input type="radio" name="transporte" value="moto"> Moto
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="distancia">Distância percorrida (km)</label>
+                    <input type="number" id="distancia" step="0.1" min="0">
+                </div>
+            </div>
+            
+            <!-- Campo de valor (agora dinâmico) -->
+            <div id="valueField" class="form-group value-field">
+                <label id="valueLabel">Valor (m³/kWh/kg)</label>
+                <input type="number" id="valor" step="0.01">
+            </div>
+            
+            <button type="submit" class="btn-submit">Atualizar Dados</button>
+        </form>
+    </main>
+
+    <script>
+        function toggleFields(selectedType) {
+            const transportFields = document.getElementById('transportFields');
+            const valueField = document.getElementById('valueField');
+            const valueLabel = document.getElementById('valueLabel');
+            
+            if (selectedType === 'transporte') {
+                transportFields.style.display = 'block';
+                valueField.style.display = 'none'; // Oculta o campo de valor
+            } else {
+                transportFields.style.display = 'none';
+                valueField.style.display = 'block'; // Mostra o campo de valor
+                
+                // Atualiza o label conforme o tipo selecionado
+                switch(selectedType) {
+                    case 'agua':
+                        valueLabel.textContent = 'Consumo de Água (m³)';
+                        break;
+                    case 'energia':
+                        valueLabel.textContent = 'Consumo de Energia (kWh)';
+                        break;
+                    case 'residuos':
+                        valueLabel.textContent = 'Resíduos Produzidos (kg)';
+                        break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>
