@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wdth,wght@0,75,100..900;1,75,100..900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0%;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+
+body{
+    background: #ffffff;
+}
+header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: #ffffff;
+    z-index: 100;
+}
+
+.flex{
+    display: flex;
+    align-items: center;
+}
+
+.container{
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+}
+.navbar {
+    justify-content: space-between;
+}
+
+.nav-links{
+    gap: 20px;
+    list-style: none;
+    padding: 0 20px;
+}
+
+.navbar a{
+    padding: 20px 0;
+    display: inline-block;
+    color: rgb(0, 0, 0);
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: 0.2s;
+}
+
+.navbar a:hover{
+    color: rgba(112, 112, 112, 0.411);
+}
+
+.logo a {
+    text-decoration: underline;
+    text-decoration-color:rgba(142, 226, 46, 0.692);
+    text-decoration-thickness: 2px; 
+    text-underline-offset: 5px; 
+    display: inline-block;
+}
+
+/*homepage*/
+
+.homepage {
+    position: relative;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.video{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    z-index: -1;
+}
+
+.homepage .content{
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 20px;
+    z-index: 1; 
+    color: white;
+}
+
+
+.homepage .text{
+    color: rgba(142, 226, 46, 0.692);
+    text-align: center;
+    margin-bottom: 50px;
+}
+
+.homepage .text p {
+    text-align: left;
+    font-size: 20px;
+    margin: 0;
+    padding: 0; 
+    margin-top: 5px; 
+    position: relative;
+    top: -60px; 
+}
+
+.homepage .text h1{
+    color: rgba(255, 255, 255, 0.425);
+    font-size: 180px;
+    font-weight: 700;
+    margin-bottom: 0px;
+}
+
+.homepage a{
+    color: white;
+    text-decoration: none;
+    background: rgba(142, 226, 46, 0.541);
+    padding: 12px 30px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    transition: 0.3s;
+    margin-top: 0px;
+}
+
+.text2 {
+    font-size: 1.1rem;         
+    margin: 5px 0 15px 0;     
+    padding: 0;
+    line-height: 1.3;
+    color: white;            
+    text-align: center;        
+    max-width: 80%;           
+    margin-left: auto;       
+    margin-right: auto;
+}
+
+.homepage a:hover{
+    color: #000000;
+    background: rgba(78, 74, 74, 0.7);
+}
+
+/*Serviços*/
+
+section{
+    padding-top: 80px;
+}
+
+.section-title{
+    text-align: center;
+    color: rgb(0, 0, 0);
+}
+
+section h2{
+    font-size: 2rem;
+}
+
+section .cards{
+    margin-top: 50px;
+    display: flex;
+    gap: 50px;
+    justify-content: space-between;
+}
+
+section .card{
+    width: calc(100% / 3 - 30px);
+    text-align: center;
+    list-style: none;
+    background-color: #e9e9e9;
+    padding: 40px 15px;
+    border-radius: 5px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+    margin-bottom: 20px;
+}
+
+section .card img{
+    height: 170px;
+    width: 170px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+section .card p{
+    margin-top: 5px;
+}
+
+/*sobre nos*/
+.about{
+    background: #000000;
+}
+.about-title{
+    text-align: center;
+    color: rgb(255, 255, 255);
+}
+.about .info{
+    margin-top: 30px;
+}
+
+.about .row{
+    padding: 0 10p;
+    padding-bottom: 30px;
+}
+.about h3{
+    margin: 30px 0 10px;
+    color: white;
+}
+
+.about p{
+    color: white;
+}
+
+/*footer*/
+.footer{
+    background: #ffffff;
+    padding: 20px 0;
+    justify-content: space-between;
+}
