@@ -3,93 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="/static/style-graficos.css">
     <title>Gráficos</title>
+    <link rel="stylesheet" href="/static/style-graficos.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <header>
         <nav class="navbar container flex">
             <h2 class="logo"><a href="#">GreenTech.</a></h2>
             <ul class="nav-links flex">
-                <li><a href="perfil.html">Voltar</a></li>
+                <li><a onclick="window.location.href='/perfil/{{ id_usuario }}'">Voltar</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="graficos-container">
-
         <div class="filtro-graficos">
             <div class="filtro-wrapper">
-                <span class="filtro-label">Período:</span>
+                <span class="filtro-label">Histórico:</span>
                 <div class="periodo-opcoes">
-                    <button class="periodo-btn active" data-periodo="7">7 dias</button>
-                    <button class="periodo-btn" data-periodo="15">15 dias</button>
-                    <button class="periodo-btn" data-periodo="30">1 mês</button>
-                    <button class="periodo-btn" data-periodo="90">3 meses</button>
-                    <button class="periodo-btn" data-periodo="180">6 meses</button>
-                    <button class="periodo-btn" data-periodo="365">1 ano</button>
+                    <button class="periodo-btn" data-periodo="7">Última Semana</button>
+                    <button class="periodo-btn" data-periodo="30">Último Mês</button>
+                    <button class="periodo-btn" data-periodo="365">Último Ano</button>                    
                 </div>
             </div>
         </div>
 
-
         <div class="grafico-principal">
             <h3 class="grafico-titulo">Seu Desempenho Geral</h3>
-            <div class="img">
-                <img src="/img/GRAFICO PRINC.png" alt="Gráfico principal de sustentabilidade"/>
-            </div>
+            <canvas id="graficoPrincipal" width="400" height="200"></canvas>
         </div>
-        
 
         <div class="graficos-secundarios">
             <div class="grafico-card">
                 <h3 class="grafico-titulo">Consumo de Água</h3>
-                <div class="img">
-                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de consumo de água"/>
-                </div>
+                <canvas id="graficoAgua"></canvas>
             </div>
-            
+
             <div class="grafico-card">
                 <h3 class="grafico-titulo">Consumo de Energia</h3>
-                <div class="img">
-                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de consumo de energia"/>
-                </div>
+                <canvas id="graficoEnergia"></canvas>
             </div>
-            
+
             <div class="grafico-card">
                 <h3 class="grafico-titulo">Resíduos Reciclados</h3>
-                <div class="img">
-                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de resíduos reciclados"/>
-                </div>
+                <canvas id="graficoResiduo"></canvas>
             </div>
-            
+
             <div class="grafico-card">
-                <h3 class="grafico-titulo">Emissão de CO₂</h3>
-                <div class="img">
-                    <img src="/img/GRAFICO PRINC.png" alt="Gráfico de emissão de CO₂"/>
-                </div>
+                <h3 class="grafico-titulo">Emissão de CO₂ / Transporte</h3>
+                <canvas id="graficoTransporte"></canvas>
             </div>
         </div>
     </section>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const botoes = document.querySelectorAll('.periodo-btn');
-            
-            botoes.forEach(botao => {
-                botao.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    
-                    botoes.forEach(btn => {
-                        btn.classList.remove('active');
-                    });
-                    
-                    this.classList.add('active');
-                    
-                });
-            });
-        });
+        window.dadosGraficos = {
+            mediaFinal: {{ media_final | tojson }},
+            pontuacaoAgua: {{ pontuacao_agua | tojson }},
+            pontuacaoEnergia: {{ pontuacao_energia | tojson }},
+            pontuacaoResiduo: {{ pontuacao_residuo | tojson }},
+            pontuacaoTransporte: {{ pontuacao_transporte | tojson }},
+            datas: {{ datas | tojson }}  
+        };
+
+        const botoesPeriodo = document.querySelectorAll('.periodo-btn');
+
+botoesPeriodo.forEach(button => {
+    button.addEventListener('click', function() {
+        // Remove a classe 'active' de todos os botões
+        botoesPeriodo.forEach(b => b.classList.remove('active'));
+        // Adiciona a classe 'active' no botão clicado
+        this.classList.add('active');
+
+        // Obtém o período selecionado
+        const periodoSelecionado = this.getAttribute('data-periodo');
+
+        // Atualiza a URL com o período selecionado (para enviar ao backend)
+        window.location.href = `/perfil/{{ id_usuario }}/graficos?periodo=${periodoSelecionado}`;
+    });
+});
+
+// Garantir que o botão 'active' seja marcado após o carregamento da página
+const periodoAtual = new URLSearchParams(window.location.search).get('periodo');
+if (periodoAtual) {
+    const botaoAtivo = document.querySelector(`.periodo-btn[data-periodo="${periodoAtual}"]`);
+    if (botaoAtivo) {
+        botaoAtivo.classList.add('active');
+    }
+}
+
     </script>
-    
+
 </body>
+<script src="/static/js/js-graficos.js" defer></script>
 </html>
+

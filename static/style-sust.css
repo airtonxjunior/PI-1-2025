@@ -92,7 +92,6 @@ header{
 .sust-image {
     flex: 1;
     min-height: 500px; 
-    background: url('img/Gemini_Generated_Image_o0igugo0igugo0ig.jpeg') center/cover;
 }
 
 .sust-info {
@@ -121,9 +120,9 @@ header{
 
 .progress {
     height: 100%;
-    width: 100%;
+    width: 0%;
     background: linear-gradient(90deg, #2E7D32, #81C784);
-    animation: progressFill 1.5s ease-out 0.3s both;
+    transition: width 1.5s ease-out;  
 }
 
 .sust-details p {
@@ -148,5 +147,4 @@ header{
     display: inline-block;
     box-shadow: 0 3px 6px rgba(0,0,0,0.16);
   }
-
 

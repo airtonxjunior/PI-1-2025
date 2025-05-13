@@ -20,11 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
 
                 const resultado = await resposta.json();
-                console.log('Resultado do login:', resultado);  // Verifique o resultado aqui!
+                console.log('Resultado do login:', resultado); 
 
                 if (resposta.ok) {
-                    const id = resultado.id;  // Pegue o id diretamente
-                    window.location.href = `/perfil/${id}`;  // Redireciona para o perfil do usuário
+                    const id = resultado.id;  
+                    window.location.href = `/perfil/${id}`; 
                 } else {
                     alert(resultado.Status || 'Erro ao fazer login');
                 }
@@ -35,3 +35,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+

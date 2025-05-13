@@ -51,7 +51,7 @@ def GET_BY_ID(command):  # conseguiu pegar => elemento do banco
     resultado = cursor.fetchone()
     cursor.close()
     con.close()
-    return resultado[0] if resultado else None
+    return resultado if resultado else None
 
 
 def PUT(command):  # conseguiu alterar => 'sucesso'
@@ -90,3 +90,4 @@ def ex_comando(method, command):
         case _:
             return "MÉTODO INVÁLIDO"
     return " "
+

@@ -13,16 +13,15 @@
         <nav class="navbar container flex">
             <h2 class="logo"><a href="#">GreenTech.</a></h2>
             <ul class="nav-links flex">
-                <li><a href="perfil.html">Voltar</a></li>
+                <li><a onclick="window.location.href='/perfil/{{ id_usuario }}'">Voltar</a></li>
             </ul>
         </nav>
     </header>
 
-
     <main class="edit-container">
         <h1 class="edit-title">Editar Dados</h1>
         
-        <form class="edit-form">
+        <form id="editForm" class="edit-form">
             <div class="form-group">
                 <label for="data">Data do Registro</label>
                 <input type="date" id="data" required>
@@ -39,7 +38,7 @@
                 </select>
             </div>
             
-            <div id="transportFields" class="transport-fields">
+            <div id="transportFields" class="transport-fields" style="display: none;">
                 <div class="form-group">
                     <label>Selecione o tipo de transporte:</label>
                     <div class="transport-options">
@@ -67,10 +66,9 @@
                 </div>
             </div>
             
-            <!-- Campo de valor (agora dinâmico) -->
             <div id="valueField" class="form-group value-field">
                 <label id="valueLabel">Valor (m³/kWh/kg)</label>
-                <input type="number" id="valor" step="0.01">
+                <input type="number" id="valor" step="0.01" required>
             </div>
             
             <button type="submit" class="btn-submit">Atualizar Dados</button>
@@ -85,12 +83,12 @@
             
             if (selectedType === 'transporte') {
                 transportFields.style.display = 'block';
-                valueField.style.display = 'none'; // Oculta o campo de valor
+                valueField.style.display = 'none'; //oculta
             } else {
                 transportFields.style.display = 'none';
-                valueField.style.display = 'block'; // Mostra o campo de valor
+                valueField.style.display = 'block'; //mostra o campo
                 
-                // Atualiza o label conforme o tipo selecionado
+                //atualiza o label
                 switch(selectedType) {
                     case 'agua':
                         valueLabel.textContent = 'Consumo de Água (m³)';
@@ -104,6 +102,49 @@
                 }
             }
         }
+
+        document.getElementById('editForm').addEventListener('submit', function(e) {
+            e.preventDefault(); //impede o envio do formulário
+
+            const dataRegistro = document.getElementById('data').value;
+            const tipo = document.getElementById('tipo').value;
+            const valor = document.getElementById('valor').value;
+            const tipoTransporte = document.querySelector('input[name="transporte"]:checked')?.value;
+            const distancia = document.getElementById('distancia').value;
+
+            const id_usuario = "{{ id_usuario }}";
+
+            //validação dos campos
+            if (!dataRegistro || !tipo || 
+                (tipo !== 'transporte' && !valor) || 
+                (tipo === 'transporte' && !tipoTransporte) || 
+                (tipo === 'transporte' && !distancia)) {
+                alert("Preencha todos os campos corretamente.");
+                return;
+            }
+
+
+            fetch(`/perfil/${id_usuario}/editar-dados`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    data_registro: dataRegistro,
+                    parametro: tipo,
+                    valor: tipo !== 'transporte' ? parseFloat(valor) : null,  // Valor para resíduos e outros tipos
+                    tipo_transporte: tipoTransporte || null,
+                    distancia: tipo === 'transporte' ? parseFloat(distancia) : null
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Dados atualizados com sucesso!');
+            })
+            .catch(error => {
+                alert('Erro ao atualizar dados!');
+            });
+        });
     </script>
 </body>
 </html>

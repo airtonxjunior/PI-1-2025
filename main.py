@@ -7,3 +7,4 @@ app = Flask('__name__')
 app.register_blueprint(home_route)
 app.register_blueprint(user_route)
 app.run(debug=True)
+

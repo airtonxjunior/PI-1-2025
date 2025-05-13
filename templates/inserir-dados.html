@@ -12,13 +12,13 @@
             <h2 class="logo"><a href="#">GreenTech.</a></h2>
 
             <ul class="nav-links flex">
-                <li><a href="perfil.html">Voltar</a></li>
+                <li><a onclick="window.location.href='/perfil/{{ id_usuario }}'">Voltar</a></li>
             </ul>
         </nav>
     </header>
 
     <section class="dados" id="dados">
-        <form action="#" method="post">
+        <form id="form-dados" data-id="{{ id_usuario }}">
             <div class="container">
                 <div class="section-text">
                     <h2>INSERIR DADOS</h2>
@@ -27,7 +27,7 @@
                         <div class="text-card">
                             <h3>CONSUMO DE ÁGUA</h3>
                             <p>Informe seu consumo diário total em litros.</p>
-                            </div>
+                        </div>
                         <label for="agua"></label>
                         <input type="text" id="agua" placeholder="Ex: 150 litros">
                     </li>
@@ -42,7 +42,7 @@
                     <li class="card">
                         <div class="text-card">
                             <h3>GERAÇÃO DE RESÍDUOS NÃO RECICLÁVEIS</h3>
-                            <p>Indique a quantidade diária de resíduos não recicláveis gerados em quilogramas. </p>
+                            <p>Indique a quantidade diária de resíduos não recicláveis gerados em quilogramas.</p>
                         </div>
                         <label for="lixo"></label>
                         <input type="text" id="lixo" placeholder="Ex: 2.5 kg">
@@ -70,4 +70,6 @@
         </form>
     </section>
 </body>
+<script src="/static/js/js-inserir-dados.js"></script>
 </html>
+
