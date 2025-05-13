@@ -1,5 +1,3 @@
-# hill_cipher.py
-
 # Converte letra para número (A=1, ..., Z=26)
 def letra_para_numero(letra):
     return ord(letra.upper()) - 64
@@ -8,10 +6,10 @@ def letra_para_numero(letra):
 def numero_para_letra(numero):
     return chr(numero + 64)
 
-# Matriz codificadora (deve ser invertível módulo 26)
+# Matriz codificadora
 matriz = [[5, 4], [3, 3]]
 
-# Função para calcular a matriz inversa módulo 26
+# matriz inversa módulo 26
 def inversa_matriz_2x2(matriz):
     # Determinante da matriz
     det = matriz[0][0] * matriz[1][1] - matriz[0][1] * matriz[1][0]
@@ -31,7 +29,7 @@ def inversa_matriz_2x2(matriz):
 
     return inversa
 
-# Função de criptografia
+
 def criptografar_hill(texto):
     texto = texto.upper().replace(" ", "")  # Remove espaços e deixa maiúsculo
 
@@ -58,7 +56,7 @@ def criptografar_hill(texto):
 
     return resultado
 
-# Função de descriptografia
+
 def descriptografar_hill(texto_criptografado):
     inversa = inversa_matriz_2x2(matriz)
     texto_criptografado = texto_criptografado.upper().replace(" ", "")  # Remove espaços e deixa maiúsculo
