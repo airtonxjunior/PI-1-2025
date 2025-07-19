@@ -1,18 +1,37 @@
-import pymysql  
+import pymysql
+import os
 
-#função que cria a conexão com o banco
 def criar_conexao():
-    return pymysql.connect( 
-        host='localhost',
-        database='monitoramentosustentabilidade',
-        user='root',
-        password='sousa123'
-    )
+    try:
+        host = os.environ.get('DB_HOST')
+        user = os.environ.get('DB_USER')
+        password = os.environ.get('DB_PASSWORD')
+        database = os.environ.get('DB_DATABASE')
 
-#teste para verificar se a conexão deu certo
+        if not all([host, user, password, database]):
+            print("Usando credenciais locais...")
+            host = 'localhost'
+            user = 'root'
+            password = 'sousa123'
+            database = 'monitoramentosustentabilidade'
+
+        return pymysql.connect(
+            host=host,
+            user=user,
+            password=password,
+            database=database
+        )
+    except Exception as e:
+        print(f"Erro ao conectar ao banco de dados: {e}")
+        return None
+
+
 con = criar_conexao()
-if con.open:
+if con and con.open:
     print('Conectado ao banco')
+else:
+    print('Falha ao conectar ao banco')
+
 
 def POST(command):
     con = criar_conexao()
@@ -64,8 +83,6 @@ def DELETE(command):
     return "sucesso"
 
 
-#função que recebe o metodo e comando, verifica o metodo e o executa com o comando
-#essa função é exportada para routes
 def ex_comando(method, command):
     match method:
         case "POST":
@@ -81,4 +98,3 @@ def ex_comando(method, command):
         case _:
             return "MÉTODO INVÁLIDO"
     return " "
-
