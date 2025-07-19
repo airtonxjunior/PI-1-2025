@@ -55,13 +55,13 @@ def criar_tabelas_se_nao_existirem():
         cursor = conn.cursor()
 
         # Comandos SQL para criar tabelas (ADAPTADOS PARA POSTGRESQL)
-        # Use IF NOT EXISTS para evitar erros se a tabela já existir
+        # REMOVIDO 'IF NOT EXISTS' DOS CREATE TYPE, pois causa erro de sintaxe
         commands = [
             """
-            CREATE TYPE IF NOT EXISTS tipo_transporte_enum AS ENUM ('carro', 'moto', 'onibus', 'metro', 'bicicleta', 'caminhada');
+            CREATE TYPE tipo_transporte_enum AS ENUM ('carro', 'moto', 'onibus', 'metro', 'bicicleta', 'caminhada');
             """,
             """
-            CREATE TYPE IF NOT EXISTS classificacao_final_enum AS ENUM ('Não Sustentável', 'Mediano', 'Sustentável');
+            CREATE TYPE classificacao_final_enum AS ENUM ('Não Sustentável', 'Mediano', 'Sustentável');
             """,
             """
             CREATE TABLE IF NOT EXISTS pessoas (
@@ -115,7 +115,7 @@ def criar_tabelas_se_nao_existirem():
                 conn.commit()
                 print(f"Comando SQL executado com sucesso: {command.splitlines()[0]}...")
             except psycopg2.errors.DuplicateObject as e:
-                # Ignora erro se o tipo/tabela já existe (por causa do IF NOT EXISTS)
+                # Ignora erro se o tipo/tabela já existe (por causa do IF NOT EXISTS ou porque o tipo já foi criado)
                 print(f"Objeto já existe, ignorando: {e}")
                 conn.rollback() # Faz rollback para limpar o estado da transação
             except Exception as e:
@@ -176,7 +176,6 @@ def DELETE(command, params=None):
     return ex_comando("DELETE", command, params)
 
 # Bloco de teste de conexão na inicialização do módulo (para Render e local)
-# Este bloco agora é mais para verificar a conexão inicial do que criar tabelas.
 con_test = criar_conexao()
 if con_test:
     print('Conectado ao banco de dados na inicialização do módulo.')
