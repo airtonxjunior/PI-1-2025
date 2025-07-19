@@ -2,24 +2,23 @@ import pymysql
 import os
 
 def criar_conexao():
+    db_host = os.environ.get('DB_HOST')
+    db_user = os.environ.get('DB_USER')
+    db_password = os.environ.get('DB_PASSWORD')
+    db_database = os.environ.get('DB_DATABASE')
+
+    if not all([db_host, db_user, db_password, db_database]):
+        db_host = 'localhost'
+        db_user = 'root'
+        db_password = 'sousa123'
+        db_database = 'monitoramentosustentabilidade'
+
     try:
-        host = os.environ.get('DB_HOST')
-        user = os.environ.get('DB_USER')
-        password = os.environ.get('DB_PASSWORD')
-        database = os.environ.get('DB_DATABASE')
-
-        if not all([host, user, password, database]):
-            print("Usando credenciais locais...")
-            host = 'localhost'
-            user = 'root'
-            password = 'sousa123'
-            database = 'monitoramentosustentabilidade'
-
         return pymysql.connect(
-            host=host,
-            user=user,
-            password=password,
-            database=database
+            host=db_host,
+            user=db_user,
+            password=db_password,
+            database=db_database
         )
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
