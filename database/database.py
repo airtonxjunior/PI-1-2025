@@ -1,42 +1,54 @@
+# database/database.py
+
 import pymysql
 import os
 
 def criar_conexao():
     """
-    Cria uma conexão com o banco de dados.
-    Tenta usar as credenciais da hospedagem primeiro. Se não achar, usa as locais.
+    Cria uma conexão com o banco de dados MySQL.
+    Hardcoded credentials for PythonAnywhere free tier, and fallback for local.
     """
-    # Na hospedagem (PythonAnywhere), estas variáveis de ambiente vão existir.
-    db_host = os.environ.get('DB_HOST')
-    db_user = os.environ.get('DB_USER')
-    db_password = os.environ.get('DB_PASSWORD')
-    db_database = os.environ.get('DB_DATABASE')
-
-    # Se estiver no seu PC, ele não vai achar as variáveis e vai usar seus dados locais.
-    if not all([db_host, db_user, db_password, db_database]):
-        db_host = 'localhost'
-        db_user = 'root'
-        db_password = 'sousa123'
-        db_database = 'monitoramentosustentabilidade'
-
     try:
+        # Credenciais para o PythonAnywhere (Free Tier)
+        # Atenção: Estas credenciais ficarão no código!
+        # Hostname: airtonjunior.mysql.pythonanywhere-services.com
+        # Username: airtonjunior
+        # Password: Antonio123@
+        # Database name: airtonjunior$default
+        
+        # Você pode comentar ou remover esta parte para rodar localmente,
+        # ou ajustar o 'if' para um modo de desenvolvimento/produção mais robusto.
+        
+        # Verifica se estamos no ambiente PythonAnywhere ( heuristicamente )
+        if 'PYTHONANYWHERE_SITE_NAME' in os.environ:
+            host = 'airtonjunior.mysql.pythonanywhere-services.com'
+            user = 'airtonjunior'
+            password = 'Antonio123@'
+            database = 'airtonjunior$default'
+        else:
+            # Credenciais para rodar no seu PC local
+            host = 'localhost'
+            user = 'root'
+            password = 'sousa123'
+            database = 'monitoramentosustentabilidade'
+
         return pymysql.connect(
-            host=db_host,
-            user=db_user,
-            password=db_password,
-            database=db_database
+            host=host,
+            user=user,
+            password=password,
+            database=database
         )
     except Exception as e:
         print(f"Erro ao conectar ao banco de dados: {e}")
         return None
 
-# O resto do seu código permanece o mesmo.
-# ... (suas funções POST, GET, etc. continuam aqui)
+# O RESTO DO SEU CÓDIGO PERMANECE IGUAL, SEM MUDANÇAS
 con = criar_conexao()
 if con and con.open:
     print('Conectado ao banco')
 else:
     print('Falha ao conectar ao banco')
+
 
 def POST(command):
     con = criar_conexao()
@@ -47,6 +59,7 @@ def POST(command):
     con.close()
     return "sucesso"
 
+
 def GET(command):
     con = criar_conexao()
     cursor = con.cursor()
@@ -55,6 +68,7 @@ def GET(command):
     cursor.close()
     con.close()
     return resultado
+
 
 def GET_BY_ID(command):
     con = criar_conexao()
@@ -65,6 +79,7 @@ def GET_BY_ID(command):
     con.close()
     return resultado if resultado else None
 
+
 def PUT(command):
     con = criar_conexao()
     cursor = con.cursor()
@@ -74,6 +89,7 @@ def PUT(command):
     con.close()
     return "sucesso"
 
+
 def DELETE(command):
     con = criar_conexao()
     cursor = con.cursor()
@@ -82,6 +98,7 @@ def DELETE(command):
     cursor.close()
     con.close()
     return "sucesso"
+
 
 def ex_comando(method, command):
     match method:
