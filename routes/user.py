@@ -134,6 +134,7 @@ def mostrar_sustentabilidade(id_usuario):
         classificacao_final = "Não Sustentável"
 
     #se for sustentável, exibe a imagem sustentável e a dica, se a média for 3 o usuário recebe o selo
+    # ATENÇÃO: CAST para classificacao_final_enum
     if classificacao_final == "Sustentável":
         if media_final == 3:
             selo = True
@@ -185,6 +186,7 @@ def mostrar_graficos(id_usuario):
 
     if resultado:
         for item in resultado: # item vem como uma tupla, ex: (datetime.date(2025, 5, 24), 3, 2, 3, 1, 2.25)
+
             data_calculo = item[0] # data_calculo recebe o primeiro item da tupla(a data) para ser formatada
             datas_formatadas.append(data_calculo.strftime('%d/%m/%y')) #ex: "24/05/25"
             pontuacao_agua.append(item[1])
@@ -227,7 +229,7 @@ def enviar_dados(id_usuario):
             leitura_atual_energia, leitura_anterior_energia, peso_residuo,
             tipo_transporte, distancia_transporte
         ) VALUES (
-            %s, CURRENT_DATE, %s, NULL, %s, NULL, %s, %s, %s
+            %s, CURRENT_DATE, %s, NULL, %s, NULL, %s, %s::tipo_transporte_enum, %s
         )
     """
     #função para inserir no banco
@@ -309,7 +311,7 @@ def enviar_dados(id_usuario):
 
     #faz o comando para inserir as pontuações na tabela resultados, no prório uptade, a média é calculada
     #soma todas as pontuações e divide por 4, >= 2.5 é sustentável, >= 1.5 mediano, abaixo de 1.5 é n sust 
-    # ATENÇÃO: Use %s para placeholders. CURDATE() -> CURRENT_DATE
+    # ATENÇÃO: Use %s para placeholders. CURRENT_DATE
     comando_resultados = """
         INSERT INTO resultados_sustentabilidade (
             pessoa_id,
@@ -323,23 +325,23 @@ def enviar_dados(id_usuario):
             classificacao_final
         )
         SELECT
-            pessoa_id,
-            id AS monitoramento_id,
-            data_registro,
-            pontuacao_agua,
-            pontuacao_energia,
-            pontuacao_residuo,
-            pontuacao_transporte,
-            (pontuacao_agua + pontuacao_energia + pontuacao_residuo + pontuacao_transporte) / 4.0 AS media,
-            CASE
-                WHEN (pontuacao_agua + pontuacao_energia + pontuacao_residuo + pontuacao_transporte) / 4.0 >= 2.5 THEN 'Sustentável'
-                WHEN (pontuacao_agua + pontuacao_energia + pontuacao_residuo + pontuacao_transporte) / 4.0 >= 1.5 THEN 'Mediano'
+            mp.pessoa_id,
+            mp.id AS monitoramento_id,
+            mp.data_registro,
+            mp.pontuacao_agua,
+            mp.pontuacao_energia,
+            mp.pontuacao_residuo,
+            mp.pontuacao_transporte,
+            (mp.pontuacao_agua + mp.pontuacao_energia + mp.pontuacao_residuo + mp.pontuacao_transporte) / 4.0 AS media,
+            (CASE
+                WHEN (mp.pontuacao_agua + mp.pontuacao_energia + mp.pontuacao_residuo + mp.pontuacao_transporte) / 4.0 >= 2.5 THEN 'Sustentável'
+                WHEN (mp.pontuacao_agua + mp.pontuacao_energia + mp.pontuacao_residuo + mp.pontuacao_transporte) / 4.0 >= 1.5 THEN 'Mediano'
                 ELSE 'Não Sustentável'
-            END AS classificacao
-        FROM monitoramento_parametros
-        WHERE pessoa_id = %s AND data_registro = CURRENT_DATE AND id NOT IN (
-            SELECT monitoramento_id FROM resultados_sustentabilidade
-            WHERE pessoa_id = %s AND data_calculo = CURRENT_DATE
+            END)::classificacao_final_enum AS classificacao -- CAST explícito
+        FROM monitoramento_parametros mp
+        WHERE mp.pessoa_id = %s AND mp.data_registro = CURRENT_DATE AND mp.id NOT IN (
+            SELECT rs.monitoramento_id FROM resultados_sustentabilidade rs
+            WHERE rs.pessoa_id = %s AND rs.data_calculo = CURRENT_DATE
         );
     """
     #função para inserir no banco
@@ -394,7 +396,7 @@ def editar_dados(id_usuario):
     elif parametro == 'transporte' and tipo_transporte:
         comando_editar = """
             UPDATE monitoramento_parametros
-            SET tipo_transporte = %s,
+            SET tipo_transporte = %s::tipo_transporte_enum, -- CAST explícito
                 distancia_transporte = %s
             WHERE pessoa_id = %s AND data_registro = %s;
         """
@@ -484,11 +486,11 @@ def editar_dados(id_usuario):
             pontuacao_residuo = mp.pontuacao_residuo,
             pontuacao_transporte = mp.pontuacao_transporte,
             media_final = ROUND((mp.pontuacao_agua + mp.pontuacao_energia + mp.pontuacao_residuo + mp.pontuacao_transporte) / 4.0, 2),
-            classificacao_final = CASE
+            classificacao_final = (CASE
                 WHEN ROUND((mp.pontuacao_agua + mp.pontuacao_energia + mp.pontuacao_residuo + mp.pontuacao_transporte) / 4.0, 2) >= 2.5 THEN 'Sustentável'
                 WHEN ROUND((mp.pontuacao_agua + mp.pontuacao_energia + mp.pontuacao_residuo + mp.pontuacao_transporte) / 4.0, 2) >= 1.5 THEN 'Mediano'
                 ELSE 'Não Sustentável'
-            END
+            END)::classificacao_final_enum -- CAST explícito
         FROM monitoramento_parametros mp
         WHERE rs.pessoa_id = mp.pessoa_id
           AND rs.data_calculo = mp.data_registro
@@ -496,6 +498,9 @@ def editar_dados(id_usuario):
           AND rs.data_calculo = %s;
     """
     # Passa os parâmetros para a cláusula WHERE principal
-    ex_comando("PUT", comando_update_resultado, (id_usuario, data_registro))
+    ex_comando("PUT", comando_update_resultado, (
+        id_usuario, data_registro, # WHERE principal
+        id_usuario, data_registro  # WHERE principal
+    ))
 
     return jsonify({'message': 'Dado atualizado com sucesso e pontuação recalculada.', 'id_usuario': id_usuario, 'data_registro': data_registro, 'parametro': parametro}), 200
