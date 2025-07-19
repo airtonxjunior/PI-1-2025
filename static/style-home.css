@@ -60,7 +60,6 @@ header{
     display: inline-block;
 }
 
-/*homepage*/
 
 .homepage {
     position: relative;
@@ -144,8 +143,6 @@ header{
     background: rgba(78, 74, 74, 0.7);
 }
 
-/*Serviços*/
-
 section{
     padding-top: 80px;
 }
@@ -188,7 +185,6 @@ section .card p{
     margin-top: 5px;
 }
 
-/*sobre nos*/
 .about{
     background: #000000;
 }
@@ -213,7 +209,6 @@ section .card p{
     color: white;
 }
 
-/*footer*/
 .footer{
     background: #ffffff;
     padding: 20px 0;

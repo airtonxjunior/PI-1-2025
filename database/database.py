@@ -1,5 +1,6 @@
 import pymysql  
 
+#função que cria a conexão com o banco
 def criar_conexao():
     return pymysql.connect( 
         host='localhost',
@@ -8,23 +9,12 @@ def criar_conexao():
         password='sousa123'
     )
 
-# Teste de conexão + leitura da tabela
+#teste para verificar se a conexão deu certo
 con = criar_conexao()
-
 if con.open:
     print('Conectado ao banco')
-    cursor = con.cursor()
 
-    cursor.execute('SELECT * FROM pessoas;')
-    r = cursor.fetchone()
-    while r:
-        print(r)
-        r = cursor.fetchone()
-
-    cursor.close()
-    con.close()
-
-def POST(command):  # conseguiu criar => 'sucesso'
+def POST(command):
     con = criar_conexao()
     cursor = con.cursor()
     cursor.execute(command)
@@ -34,7 +24,7 @@ def POST(command):  # conseguiu criar => 'sucesso'
     return "sucesso" 
 
 
-def GET(command):  # conseguiu pegar => elemento do banco
+def GET(command):
     con = criar_conexao()
     cursor = con.cursor()
     cursor.execute(command)
@@ -44,7 +34,7 @@ def GET(command):  # conseguiu pegar => elemento do banco
     return resultado
 
 
-def GET_BY_ID(command):  # conseguiu pegar => elemento do banco
+def GET_BY_ID(command):
     con = criar_conexao()
     cursor = con.cursor()
     cursor.execute(command)
@@ -54,7 +44,7 @@ def GET_BY_ID(command):  # conseguiu pegar => elemento do banco
     return resultado if resultado else None
 
 
-def PUT(command):  # conseguiu alterar => 'sucesso'
+def PUT(command):
     con = criar_conexao()
     cursor = con.cursor()
     cursor.execute(command)
@@ -64,7 +54,7 @@ def PUT(command):  # conseguiu alterar => 'sucesso'
     return "sucesso"
 
 
-def DELETE(command):  # conseguiu deletar => 'sucesso'
+def DELETE(command):
     con = criar_conexao()
     cursor = con.cursor()
     cursor.execute(command)
@@ -74,7 +64,8 @@ def DELETE(command):  # conseguiu deletar => 'sucesso'
     return "sucesso"
 
 
-
+#função que recebe o metodo e comando, verifica o metodo e o executa com o comando
+#essa função é exportada para routes
 def ex_comando(method, command):
     match method:
         case "POST":

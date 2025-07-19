@@ -13,7 +13,7 @@
         <nav class="navbar container flex">
             <h2 class="logo"><a href="#">GreenTech.</a></h2>
             <ul class="nav-links flex">
-                <li><a href="index.html">Sair</a></li>
+                <li><a href="{{ url_for('user.logout') }}">Sair</a></li>
             </ul>
         </nav>
     </header>
@@ -24,7 +24,7 @@
             <div class="section text">
                 <h2 class="username">Olá, {{ nome_usuario }}!</h2>
                 <h2>MEU PERFIL</h2>
-                <p>Através dos cards, você pode: registrar seus dados de consumo, verificar seu nível atual de sustentabilidade e acompanhar sua evolução por meio de gráficos detalhados.</p>
+                <p>Acompanhe seu progresso e explore novas maneiras de ser mais sustentável.</p>
             </div>
             <ul class="cards flex">
                 <li class="card" onclick="window.location.href='/perfil/{{ id_usuario }}/inserir-dados'">

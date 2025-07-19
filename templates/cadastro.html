@@ -4,29 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/static/style-cadastro.css">
-    <title>Cadastro</title>
+    <link rel="stylesheet" href="/static/style-cadastro.css"> <title>Cadastro</title>
 </head>
 <body>
     <main class="container">
         <form id="form-cadastro">
             <h1>Cadastro</h1>
             <div class="input-box">
-                <input id="nome" placeholder="Digite seu nome de usuário" type="text" name="nome" required>
+                <input id="nome" placeholder="Digite seu nome de usuário" type="text" name="nome">
                 <i class="bx bxs-user"></i>
             </div>
+            <span id="nome-error" class="error-message"></span>
+
             <div class="input-box">
-                <input id="email" placeholder="Digite seu email" type="email" name="email" required>
-                <i class="bx bxs-user"></i>
-            </div>
+                <input id="email" placeholder="Digite seu email" type="email" name="email">
+                <i class="bx bxs-user"></i> </div>
+            <span id="email-error" class="error-message"></span>
+
             <div class="input-box">
-                <input id="senha" placeholder="Digite sua senha" type="password" name="senha" required>
+                <input id="senha" placeholder="Digite sua senha" type="password" name="senha">
                 <i class="bx bxs-lock"></i>
             </div>
+            <span id="senha-error" class="error-message"></span>
+
             <div class="input-box">
-                <input placeholder="Confirme a senha" type="password" required>
+                <input id="confirma-senha" placeholder="Confirme a senha" type="password">
                 <i class="bx bxs-lock"></i>
             </div>
+            <span id="confirma-senha-error" class="error-message"></span>
         
             <button type="submit" class="login">Criar Conta</button>
         
@@ -34,7 +39,7 @@
                 <p>Já tem uma conta? <a href="{{ url_for('user.mostrar_login') }}">Faça Login</a></p>
             </div>
         </form>
+    </main>
+    <script src="/static/js/js-cadastro.js"></script>
 </body>
-<script src="/static/js/js-cadastro.js"></script>
 </html>
-

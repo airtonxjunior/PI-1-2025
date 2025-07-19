@@ -58,6 +58,7 @@
     </section>
 
     <script>
+        //envia os dados pro js externo
         window.dadosGraficos = {
             mediaFinal: {{ media_final | tojson }},
             pontuacaoAgua: {{ pontuacao_agua | tojson }},
@@ -71,20 +72,20 @@
 
 botoesPeriodo.forEach(button => {
     button.addEventListener('click', function() {
-        // Remove a classe 'active' de todos os botões
+        //remove a classe 'active' de todos os botões
         botoesPeriodo.forEach(b => b.classList.remove('active'));
-        // Adiciona a classe 'active' no botão clicado
+        //adiciona a classe 'active' no botão clicado
         this.classList.add('active');
 
-        // Obtém o período selecionado
+        //obtém o período selecionado
         const periodoSelecionado = this.getAttribute('data-periodo');
 
-        // Atualiza a URL com o período selecionado (para enviar ao backend)
+        //atualiza a URL com o período selecionado (para enviar ao backend)
         window.location.href = `/perfil/{{ id_usuario }}/graficos?periodo=${periodoSelecionado}`;
     });
 });
 
-// Garantir que o botão 'active' seja marcado após o carregamento da página
+//garante que o botão 'active' seja marcado após o carregamento da página
 const periodoAtual = new URLSearchParams(window.location.search).get('periodo');
 if (periodoAtual) {
     const botaoAtivo = document.querySelector(`.periodo-btn[data-periodo="${periodoAtual}"]`);
@@ -92,7 +93,6 @@ if (periodoAtual) {
         botaoAtivo.classList.add('active');
     }
 }
-
     </script>
 
 </body>
