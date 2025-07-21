@@ -1,18 +1,15 @@
-# database/database.py
-
 import os
 from urllib.parse import urlparse
-import psycopg2 # Importa o driver psycopg2
+import psycopg2
 
 def criar_conexao():
-    """Cria uma conexão com o banco de dados PostgreSQL."""
     try:
         database_url = os.environ.get('DATABASE_URL')
         
         if not database_url:
-            # Fallback para credenciais locais (MySQL) se DATABASE_URL não estiver definida.
+            #fallback para credenciais locais (MySQL) se DATABASE_URL não estiver definida.
             print("DATABASE_URL não definida. Usando credenciais locais (MySQL)...")
-            import pymysql # Importa PyMySQL apenas para uso local
+            import pymysql #importa PyMySQL apenas para uso local
             return pymysql.connect(
                 host='localhost',
                 user='root',
@@ -24,13 +21,13 @@ def criar_conexao():
         # Se DATABASE_URL estiver definida (ambiente Render)
         url = urlparse(database_url)
         
-        # Conecta usando as informações da URL do PostgreSQL
+        #conecta usando as informações da URL do PostgreSQL
         conn = psycopg2.connect(
             host=url.hostname,
             user=url.username,
             password=url.password,
-            database=url.path[1:], # Remove a barra inicial
-            port=url.port if url.port else 5432 # Porta padrão do PostgreSQL é 5432
+            database=url.path[1:], #remove a barra inicial
+            port=url.port if url.port else 5432 #porta padrão do PostgreSQL
         )
         print(f"Conexão com o DB Render (PostgreSQL) estabelecida com sucesso.")
         return conn
@@ -40,10 +37,6 @@ def criar_conexao():
         return None
 
 def criar_tabelas_se_nao_existirem():
-    """
-    Tenta criar as tabelas no banco de dados se elas não existirem.
-    Esta função é chamada na inicialização do aplicativo.
-    """
     print("Tentando criar tabelas se não existirem...")
     conn = None
     try:
@@ -55,7 +48,6 @@ def criar_tabelas_se_nao_existirem():
         cursor = conn.cursor()
 
         # Comandos SQL para criar tabelas (ADAPTADOS PARA POSTGRESQL)
-        # REMOVIDO 'IF NOT EXISTS' DOS CREATE TYPE, pois causa erro de sintaxe
         commands = [
             """
             CREATE TYPE tipo_transporte_enum AS ENUM ('carro', 'moto', 'onibus', 'metro', 'bicicleta', 'caminhada');
@@ -115,12 +107,12 @@ def criar_tabelas_se_nao_existirem():
                 conn.commit()
                 print(f"Comando SQL executado com sucesso: {command.splitlines()[0]}...")
             except psycopg2.errors.DuplicateObject as e:
-                # Ignora erro se o tipo/tabela já existe (por causa do IF NOT EXISTS ou porque o tipo já foi criado)
+                #ignora erro se o tipo/tabela já existe (por causa do IF NOT EXISTS ou porque o tipo já foi criado)
                 print(f"Objeto já existe, ignorando: {e}")
-                conn.rollback() # Faz rollback para limpar o estado da transação
+                conn.rollback() #faz rollback para limpar o estado da transação
             except Exception as e:
                 print(f"Erro ao executar comando SQL: {command.splitlines()[0]}... Erro: {e}")
-                conn.rollback() # Faz rollback em caso de erro
+                conn.rollback() #faz rollback em caso de erro
 
         print("Verificação e criação de tabelas concluída.")
 
@@ -130,15 +122,8 @@ def criar_tabelas_se_nao_existirem():
         if conn:
             conn.close()
 
-# As funções GET, POST, PUT, DELETE e ex_comando precisam ser ajustadas
-# para usar o cursor do psycopg2 e para trabalhar com parâmetros de forma segura.
 
 def ex_comando(method, comando_sql, params=None):
-    """
-    Executa um comando SQL de forma segura.
-    ATENÇÃO: Com psycopg2, 'params' deve ser uma TUPLA ou LISTA de valores,
-    e o 'comando_sql' deve usar '%s' como placeholder.
-    """
     con = criar_conexao()
     if con is None:
         return None
@@ -152,7 +137,7 @@ def ex_comando(method, comando_sql, params=None):
                     resultado = cursor.fetchall()
                 elif method.upper() == "GET_BY_ID":
                     resultado = cursor.fetchone()
-                else: # Para INSERT, UPDATE, DELETE
+                else: #para INSERT, UPDATE, DELETE
                     con.commit()
                     resultado = "Sucesso"
         return resultado
@@ -175,7 +160,7 @@ def PUT(command, params=None):
 def DELETE(command, params=None):
     return ex_comando("DELETE", command, params)
 
-# Bloco de teste de conexão na inicialização do módulo (para Render e local)
+#bloco de teste de conexão na inicialização do módulo
 con_test = criar_conexao()
 if con_test:
     print('Conectado ao banco de dados na inicialização do módulo.')

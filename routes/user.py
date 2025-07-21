@@ -1,7 +1,7 @@
 from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
 from database.database import ex_comando
 from criptografia.criptografia import criptografar_hill, descriptografar_hill
-import datetime # Importado para usar datas se necessário, embora CURRENT_DATE seja SQL
+
 
 user_route = Blueprint('user', __name__)
 
@@ -25,31 +25,26 @@ def criar_conta():
     senha_criptografada = criptografar_hill(senha_original)
 
     #verifica se existe algum usuário com o mesmo email
-    # ATENÇÃO: Use %s para placeholder e passe os parâmetros como TUPLA
     comando = "SELECT EXISTS(SELECT 1 FROM pessoas WHERE email = %s)"
-    resultado = ex_comando("GET_BY_ID", comando, (email,)) # Passa o email como uma tupla
+    resultado = ex_comando("GET_BY_ID", comando, (email,)) #passa o email como uma tupla
 
-    # O resultado de EXISTS no PostgreSQL com psycopg2 será (True,) ou (False,)
-    # ou (1,) ou (0,) dependendo da versão e configuração, então a verificação é robusta.
-    if resultado and resultado[0]: # Verifica se a tupla não está vazia e o primeiro elemento é True/1
+    if resultado and resultado[0]: #verifica se a tupla não está vazia e o primeiro elemento é True/1
         return jsonify({'erro': 'Usuário já cadastrado com este e-mail.'}), 409
 
     #inserir novo usuário com senha criptografada no banco
-    # ATENÇÃO: Use %s para placeholders
     comando = "INSERT INTO pessoas (nome, email, senha) VALUES (%s, %s, %s)"
     try:
-        ex_comando("POST", comando, (nome, email, senha_criptografada)) # Passa os valores como tupla
+        ex_comando("POST", comando, (nome, email, senha_criptografada)) #passa os valores como tupla
     except Exception as e_db:
         print(f"Erro ao inserir usuário no banco: {e_db}")
         return jsonify({'erro': 'Erro ao criar conta no banco de dados.'}), 500
 
     #pega o id do usuário gerado no banco
-    # ATENÇÃO: Use %s para placeholder
     comando = "SELECT id FROM pessoas WHERE email = %s"
-    resultado = ex_comando("GET_BY_ID", comando, (email,)) # Passa o email como uma tupla
+    resultado = ex_comando("GET_BY_ID", comando, (email,)) #passa o email como uma tupla
 
     if resultado:
-        id_usuario = resultado[0] # resultado é uma tupla, ex: (123,)
+        id_usuario = resultado[0] #resultado é uma tupla, ex: (123,)
         return jsonify({'id': id_usuario, 'message': 'Conta criada com sucesso!'}), 201
     else:
         print(f"Erro CRÍTICO: Usuário inserido mas ID não encontrado para email {email}")
@@ -67,13 +62,12 @@ def fazer_login():
     senha_original = data.get('senha')
 
     #pega o id e senha do usuário que está no banco de dados
-    # ATENÇÃO: Use %s para placeholder
     comando = "SELECT id, senha FROM pessoas WHERE email = %s LIMIT 1"
-    retorno = ex_comando("GET_BY_ID", comando, (email,)) # Passa o email como uma tupla
+    retorno = ex_comando("GET_BY_ID", comando, (email,)) #passa o email como uma tupla
 
     #se tiver retorno, essas duas variáveis recebem o retorno
     if retorno:
-        id_usuario_db, senha_criptografada_db = retorno # retorno é uma tupla, ex: (1, 'SENHA_CRIP')
+        id_usuario_db, senha_criptografada_db = retorno #retorno é uma tupla, ex: (1, 'SENHA_CRIP')
         
         try:
             #faz a descriptografia
@@ -104,14 +98,13 @@ def perfil(id_usuario):
         return redirect(url_for('user.mostrar_login'))
     
     #pega o nome do usuário para retornar pro frontend
-    # ATENÇÃO: Use %s para placeholder
     comando = "SELECT nome FROM pessoas WHERE id = %s"
-    resultado = ex_comando("GET_BY_ID", comando, (id_usuario,)) # Passa o id como uma tupla
+    resultado = ex_comando("GET_BY_ID", comando, (id_usuario,)) #passa o id como uma tupla
     
     if resultado:
-        nome_usuario = resultado[0] # resultado é uma tupla, ex: ('Nome',)
+        nome_usuario = resultado[0] #resultado é uma tupla, ex: ('Nome',)
     else:
-        nome_usuario = "Usuário Desconhecido" # Adicionado fallback caso não encontre o nome
+        nome_usuario = "Usuário Desconhecido" #fallback caso não encontre o nome
     return render_template("perfil.html", id_usuario=id_usuario, nome_usuario=nome_usuario)
 
 @user_route.route('/perfil/<int:id_usuario>/sustentabilidade')
@@ -121,20 +114,18 @@ def mostrar_sustentabilidade(id_usuario):
         return redirect(url_for('user.mostrar_login')) 
     
     #cria a variável comando com o comando para o banco, selecionando a media e classificação
-    # ATENÇÃO: Use %s para placeholder
     comando = "SELECT media_final, classificacao_final FROM resultados_sustentabilidade WHERE pessoa_id = %s ORDER BY id DESC LIMIT 1"
-    resultado = ex_comando("GET_BY_ID", comando, (id_usuario,)) # Passa o id como uma tupla
+    resultado = ex_comando("GET_BY_ID", comando, (id_usuario,)) #passa o id como uma tupla
 
     #se tiver resultado, as duas variáveis recebem resultado em ordem
     if resultado:
-        media_final, classificacao_final = resultado # resultado é uma tupla, ex: (2.5, 'Sustentavel')
+        media_final, classificacao_final = resultado #resultado é uma tupla, ex: (2.5, 'Sustentavel')
     else:
         #se não obter resultado (primeiro acesso), as variáveis recebem 0 e não sustentável
         media_final = 0
         classificacao_final = "Não Sustentável"
 
     #se for sustentável, exibe a imagem sustentável e a dica, se a média for 3 o usuário recebe o selo
-    # ATENÇÃO: CAST para classificacao_final_enum
     if classificacao_final == "Sustentável":
         if media_final == 3:
             selo = True
@@ -165,7 +156,6 @@ def mostrar_graficos(id_usuario):
     periodo = request.args.get('periodo', 7) #pega o período selecionado na URL, padrão é 7 dias
 
     #pesquisa no banco as pontuações e média, filtrando pelo período fornecido
-    # ATENÇÃO: Use %s para placeholders. CURDATE() -> CURRENT_DATE, INTERVAL {periodo} DAY -> INTERVAL %s DAY
     comando = """
         SELECT data_calculo, pontuacao_agua, pontuacao_energia, pontuacao_residuo, pontuacao_transporte, media_final
         FROM resultados_sustentabilidade
@@ -174,7 +164,7 @@ def mostrar_graficos(id_usuario):
         ORDER BY data_calculo DESC
     """
     # Passa id_usuario e periodo como tupla
-    resultado = ex_comando("GET", comando, (id_usuario, str(periodo))) # period é passado como string para o INTERVAL
+    resultado = ex_comando("GET", comando, (id_usuario, str(periodo))) #period é passado como string para o INTERVAL
 
     #inicializa as listas vazias
     datas_formatadas = [] 
@@ -187,8 +177,8 @@ def mostrar_graficos(id_usuario):
     if resultado:
         for item in resultado: # item vem como uma tupla, ex: (datetime.date(2025, 5, 24), 3, 2, 3, 1, 2.25)
 
-            data_calculo = item[0] # data_calculo recebe o primeiro item da tupla(a data) para ser formatada
-            datas_formatadas.append(data_calculo.strftime('%d/%m/%y')) #ex: "24/05/25"
+            data_calculo = item[0] #data_calculo recebe o primeiro item da tupla(a data) para ser formatada
+            datas_formatadas.append(data_calculo.strftime('%d/%m/%y')) #ex 24/05/25
             pontuacao_agua.append(item[1])
             pontuacao_energia.append(item[2])
             pontuacao_residuo.append(item[3])
@@ -222,7 +212,6 @@ def enviar_dados(id_usuario):
     distancia = data.get('distancia')
 
     #faz o comando para inserir os dados e executa a função para inserir no banco
-    # ATENÇÃO: Use %s para placeholders. CURDATE() -> CURRENT_DATE
     comando_inserir = """
         INSERT INTO monitoramento_parametros (
             pessoa_id, data_registro, leitura_atual_agua, leitura_anterior_agua,
@@ -236,7 +225,6 @@ def enviar_dados(id_usuario):
     ex_comando("POST", comando_inserir, (id_usuario, agua, energia, residuo, transporte, distancia))
 
     #faz o uptade na pontuação de água, maior que 150 recebe 1, entre 110 e 150 recebe 2, se não recebe 3
-    # ATENÇÃO: Use %s para placeholder
     comando_update_agua = """
         UPDATE monitoramento_parametros
         SET pontuacao_agua = CASE
@@ -250,7 +238,6 @@ def enviar_dados(id_usuario):
     ex_comando("PUT", comando_update_agua, (id_usuario,))
 
     #faz o uptade na pontuação de energia, maior que 180 recebe 1, entre 120 e 180 recebe 2, se não recebe 3
-    # ATENÇÃO: Use %s para placeholder
     comando_update_energia = """
         UPDATE monitoramento_parametros
         SET pontuacao_energia = CASE
@@ -264,7 +251,6 @@ def enviar_dados(id_usuario):
     ex_comando("PUT", comando_update_energia, (id_usuario,))
 
     #faz o uptade na pontuação de residuos, maior que 1.2 recebe 1, entre 0.8 e 1.2 recebe 2, se não recebe 3
-    # ATENÇÃO: Use %s para placeholder
     comando_update_residuo = """
         UPDATE monitoramento_parametros
         SET pontuacao_residuo = CASE
@@ -278,7 +264,6 @@ def enviar_dados(id_usuario):
     ex_comando("PUT", comando_update_residuo, (id_usuario,))
     
     #faz o uptade na emissão de co2, é multiplicado a distancia com a quantidade de co2 que cada veículo produz
-    # ATENÇÃO: Use %s para placeholder
     comando_update_emissao = """
         UPDATE monitoramento_parametros
         SET emissao_co2 = CASE tipo_transporte
@@ -296,7 +281,6 @@ def enviar_dados(id_usuario):
     ex_comando("PUT", comando_update_emissao, (id_usuario,)) 
 
     #faz o uptade na pontuação de transporte, maior que 5 recebe 1, entre 2 e 5 recebe 2, se não recebe 3
-    # ATENÇÃO: Use %s para placeholder
     comando_update_transporte = """
         UPDATE monitoramento_parametros
         SET pontuacao_transporte = CASE
@@ -311,7 +295,6 @@ def enviar_dados(id_usuario):
 
     #faz o comando para inserir as pontuações na tabela resultados, no prório uptade, a média é calculada
     #soma todas as pontuações e divide por 4, >= 2.5 é sustentável, >= 1.5 mediano, abaixo de 1.5 é n sust 
-    # ATENÇÃO: Use %s para placeholders. CURRENT_DATE
     comando_resultados = """
         INSERT INTO resultados_sustentabilidade (
             pessoa_id,
@@ -345,7 +328,7 @@ def enviar_dados(id_usuario):
         );
     """
     #função para inserir no banco
-    ex_comando("POST", comando_resultados, (id_usuario, id_usuario)) # Passa id_usuario duas vezes
+    ex_comando("POST", comando_resultados, (id_usuario, id_usuario)) #passa id_usuario duas vezes
 
     return jsonify({'message': 'Dados inseridos e resultados calculados com sucesso', 'id_usuario': id_usuario}), 201
 
@@ -371,7 +354,6 @@ def editar_dados(id_usuario):
     distancia = data.get('distancia')
 
     #verifica qual dado foi alterado e insere o novo valor digitado filtrando pela data informada
-    # ATENÇÃO: Use %s para placeholders
     if parametro == 'agua':
         comando_editar = """
             UPDATE monitoramento_parametros
@@ -412,7 +394,6 @@ def editar_dados(id_usuario):
         return jsonify({'message': 'Parâmetro inválido ou falta de dados'}), 400
 
     #refaz o calculo da pontuação do parâmetro informado
-    # ATENÇÃO: Use %s para placeholders
     if parametro == 'agua':
         comando_update_agua = """
             UPDATE monitoramento_parametros
@@ -477,7 +458,6 @@ def editar_dados(id_usuario):
         ex_comando("PUT", comando_update_transporte, (id_usuario, data_registro))
 
     #atualiza a tabela de resultados
-    # ATENÇÃO: Use %s para placeholders
     comando_update_resultado = """
         UPDATE resultados_sustentabilidade rs
         SET 
@@ -497,10 +477,10 @@ def editar_dados(id_usuario):
           AND rs.pessoa_id = %s
           AND rs.data_calculo = %s;
     """
-    # Passa os parâmetros para a cláusula WHERE principal
+    #passa os parâmetros para a cláusula WHERE principal
     ex_comando("PUT", comando_update_resultado, (
-        id_usuario, data_registro, # WHERE principal
-        id_usuario, data_registro  # WHERE principal
+        id_usuario, data_registro, #WHERE principal
+        id_usuario, data_registro  #WHERE principal
     ))
 
     return jsonify({'message': 'Dado atualizado com sucesso e pontuação recalculada.', 'id_usuario': id_usuario, 'data_registro': data_registro, 'parametro': parametro}), 200
