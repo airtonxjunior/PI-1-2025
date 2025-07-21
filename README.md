@@ -1,7 +1,7 @@
 🌿 GreenTech: Sistema de Monitoramento de Sustentabilidade
 Um sistema web desenvolvido para ajudar usuários a monitorar e visualizar seus hábitos de consumo de água, energia, resíduos e transporte, calculando uma pontuação de sustentabilidade e oferecendo insights para um estilo de vida mais ecológico.
 
-✨ Funcionalidades
+Funcionalidades
 Cadastro e Login de Usuários: Sistema de autenticação seguro.
 
 Inserção de Dados de Consumo: Registro de consumo de água, energia, peso de resíduos, tipo de transporte e distância percorrida.
